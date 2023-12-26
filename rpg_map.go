@@ -24,7 +24,6 @@ func main() {
 	ids := config.GetMapIDs()
 	for _, mid := range ids {
 		name := common.GetMapName(mid)
-		fmt.Println("create map", mid, name)
 		_, ret := common.CallName(maps.MapServer, global.CreateMap{ID: mid, Name: name})
 		fmt.Println("create map result,", ret)
 	}
