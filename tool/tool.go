@@ -22,3 +22,12 @@ func ConvertToIntArray(str string) []int32 {
 	}
 	return result
 }
+
+// IF 一个简单的判断
+func IF(t bool, p1, p2 interface{}) interface{} {
+	if t {
+		return p1
+	} else {
+		return p2
+	}
+}

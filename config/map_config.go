@@ -106,3 +106,12 @@ func GetMapConfig(mapID int32) (config MapConfig, err error) {
 	err = errors.New(fmt.Sprintf("not found map %d", mapID))
 	return
 }
+
+func (pos ConfigPos) InSlice(posList []ConfigPos) bool {
+	for _, p := range posList {
+		if p.X == pos.X && p.Y == pos.Y {
+			return true
+		}
+	}
+	return false
+}

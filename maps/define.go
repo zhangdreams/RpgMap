@@ -1,6 +1,10 @@
 package maps
 
-import "rpgMap/global"
+import (
+	"rpgMap/common"
+	"rpgMap/config"
+	"rpgMap/global"
+)
 
 // Gird aoi map的key
 type Gird struct {
@@ -56,7 +60,9 @@ type MapState struct {
 	Line         int32
 	CreateTime   int64
 	LastTickTime int64
+	Pid          *common.Pid
 	Actors       map[ActorKey]*MapActor
+	Config       config.MapConfig
 }
 
 type MapBuff struct {
