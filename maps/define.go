@@ -6,17 +6,6 @@ import (
 	"rpgMap/global"
 )
 
-// Gird aoi map的key
-type Gird struct {
-	X int32
-	Y int32
-}
-
-type ActorKey struct {
-	ActorType int8
-	ActorID   int64
-}
-
 type MapActor struct {
 	ActorType int8
 	ActorID   int64
@@ -61,8 +50,9 @@ type MapState struct {
 	CreateTime   int64
 	LastTickTime int64
 	Pid          *common.Pid
-	Actors       map[ActorKey]*MapActor
+	Actors       map[global.ActorKey]*MapActor
 	Config       config.MapConfig
+	Areas        *map[global.Grid]*[]global.ActorKey
 }
 
 type MapBuff struct {

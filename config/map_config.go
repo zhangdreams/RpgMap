@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"rpgMap/global"
 	"strconv"
 	"strings"
 )
@@ -63,7 +64,30 @@ func ReadMap() {
 		return
 	}
 
+	for _, conf := range mapConfigs {
+		InitMapCache(conf)
+	}
 	//showAllMaps()
+}
+
+// InitMapCache 初始化地图缓存数据
+func InitMapCache(conf MapConfig) {
+	maxWidth := conf.Width / global.GridLength
+	maxHeight := conf.Height / global.GridHeight
+
+	var areasKeys []global.Grid
+	var neighbors = map[global.Grid][]global.Grid{}
+	for i := int32(0); i <= maxWidth; i++ {
+		for j := int32(0); j <= maxHeight; j++ {
+			areaKey := global.GetGrid(i, j)
+			areasKeys = append(areasKeys, areaKey)
+
+			neighborGrids := global.GetGridNeighbors(i, j, maxWidth, maxHeight)
+			neighbors[areaKey] = neighborGrids
+		}
+	}
+	global.MapAreaKeyCache[conf.MapID] = areasKeys
+	global.MapAreaNeighborsCache[conf.MapID] = neighbors
 }
 
 // 输出解析结果
