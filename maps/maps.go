@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"rpgMap/common"
 	"rpgMap/config"
+	"rpgMap/global"
 )
 
 func StartMap(args ...interface{}) *common.Pid {
@@ -49,4 +50,15 @@ func MakeMapState(pid *common.Pid, args []interface{}) *MapState {
 		Areas:        areas,
 	}
 	return &state
+}
+
+// GetMapInfo 返回一个地图内的对象
+func (state *MapState) GetMapInfo(actorType int8, actorID int64) MapInfo {
+	if actorType == ACTOR_ROLE {
+		return state.Roles[actorID]
+	}
+	return state.Monsters[actorID]
+}
+func (state *MapState) GetMapInfoByKey(key global.ActorKey) MapInfo {
+	return state.GetMapInfo(key.ActorType, key.ActorID)
 }

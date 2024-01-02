@@ -6,6 +6,12 @@ import (
 	"rpgMap/global"
 )
 
+// 实例类型
+const (
+	ACTOR_ROLE    = 1 // 玩家
+	ACTOR_MONSTER = 2
+)
+
 type MapActor struct {
 	ActorType int8
 	ActorID   int64
@@ -13,7 +19,6 @@ type MapActor struct {
 	IsMove    bool
 	BaseProp  *global.Prop
 	TotalProp *global.Prop
-	Buffs     map[int32]*MapBuff
 }
 
 // MapRole 地图中玩家信息，基本是需要用于同步的
@@ -24,9 +29,11 @@ type MapRole struct {
 	Level  int32
 	HP     int32
 	MaxHP  int32
+	State  int8
 	Pos    *global.Pos
 	TarPos *global.Pos
 	Camp   int16
+	Buffs  map[int32]*MapBuff
 }
 
 // MapMonster 地图中怪物信息，基本是需要用于同步的
@@ -37,10 +44,12 @@ type MapMonster struct {
 	Level  int32
 	HP     int32
 	MaxHP  int32
+	State  int8
 	Pos    *global.Pos
 	TarPos *global.Pos
 	Camp   int16
 	Path   []global.Point
+	Buffs  map[int32]*MapBuff
 }
 
 type MapState struct {
@@ -51,8 +60,19 @@ type MapState struct {
 	LastTickTime int64
 	Pid          *common.Pid
 	Actors       map[global.ActorKey]*MapActor
+	Roles        map[int64]*MapRole
+	Monsters     map[int64]*MapMonster
 	Config       config.MapConfig
 	Areas        *map[global.Grid]*[]global.ActorKey
+}
+
+type MapInfo interface {
+	GetType() int8
+	GetID() int64
+	IsAlive() bool
+	GetCamp() int16
+	GetBuffs() map[int32]*MapBuff
+	SetBuffs(map[int32]*MapBuff)
 }
 
 type MapBuff struct {

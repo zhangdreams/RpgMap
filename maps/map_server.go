@@ -68,7 +68,7 @@ func handleCall(data interface{}) (ret interface{}, err error) {
 		m := data.(global.CreateMap)
 		ret = createMap(m.ID, m.Name, m.Line)
 	default:
-		err = errors.New(fmt.Sprint(MapServer, "unhanle msg", data))
+		err = errors.New(fmt.Sprint(MapServer, "unhandled msg", data))
 	}
 	return
 }
@@ -83,7 +83,7 @@ func handle(data interface{}) {
 			common.UnRegister(MapServer)
 		}
 	default:
-		fmt.Println(MapServer, "unhanle msg", data)
+		fmt.Println(MapServer, "unhandled msg", data)
 	}
 }
 

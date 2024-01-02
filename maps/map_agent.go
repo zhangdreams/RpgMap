@@ -39,7 +39,7 @@ func (state *MapState) mapHandleCall(data interface{}) (ret interface{}, err err
 	switch data.(type) {
 
 	default:
-		err = errors.New(fmt.Sprint(MapServer, "unhanle msg", data))
+		err = errors.New(fmt.Sprint(MapServer, "unhandled msg", data))
 	}
 	return
 }
@@ -53,6 +53,6 @@ func (state *MapState) mapHandle(data interface{}) {
 			close(server.Out)
 		}
 	default:
-		fmt.Println(MapServer, "unhanle msg", data)
+		fmt.Println(MapServer, "unhandled msg", data)
 	}
 }
