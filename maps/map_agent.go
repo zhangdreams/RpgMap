@@ -11,7 +11,6 @@ func (state *MapState) mapHandleMsg(pid *common.Pid) {
 	for {
 		select {
 		case data, ok := <-pid.In:
-			fmt.Println(MapServer, "handleMsg", data)
 			if !ok {
 				return
 			}
@@ -39,7 +38,7 @@ func (state *MapState) mapHandleCall(data interface{}) (ret interface{}, err err
 	switch data.(type) {
 
 	default:
-		err = errors.New(fmt.Sprint(MapServer, "unhandled msg", data))
+		err = errors.New(fmt.Sprint(state.Name, "unhandled msg", data))
 	}
 	return
 }
@@ -47,12 +46,13 @@ func (state *MapState) mapHandleCall(data interface{}) (ret interface{}, err err
 func (state *MapState) mapHandle(data interface{}) {
 	switch data.(type) {
 	case global.Exit:
-		if server := common.WhereIs(MapServer); server != nil {
-			common.UnRegister(MapServer)
-			close(server.In)
-			close(server.Out)
-		}
+		close(state.Pid.In)
+		close(state.Pid.Out)
+	case global.Loop:
+		state.MapLoop()
+	case global.ModHandle:
+		state.Mod.Handle(state, data.(global.ModHandle).Msg)
 	default:
-		fmt.Println(MapServer, "unhandled msg", data)
+		fmt.Println(state.Name, "unhandled msg", data)
 	}
 }

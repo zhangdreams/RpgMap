@@ -23,7 +23,7 @@ func main() {
 	for _, mid := range ids {
 		name := common.GetMapName(mid)
 		fmt.Println("create map", mid, name)
-		_, ret := common.CallName(maps.MapServer, global.CreateMap{ID: mid, Name: name})
+		_, ret := common.CallName(maps.MapServer, global.CreateMap{ID: mid, Name: name, ModName: "mod_common"})
 		fmt.Println("create map result,", ret)
 	}
 

@@ -56,6 +56,7 @@ type MapState struct {
 	MapID        int32
 	Name         string
 	Line         int32
+	Mod          *MapMod
 	CreateTime   int64
 	LastTickTime int64
 	Pid          *common.Pid
@@ -81,4 +82,23 @@ type MapBuff struct {
 	SrcID   int64
 	EndTime int64
 	Value   int32
+}
+
+type MapMod struct {
+	// 玩法地图初始化
+	Init func(state *MapState, mapID int32, args ...interface{})
+	// 玩家进入地图
+	RoleEnter func(state *MapState, roleID int64)
+	// 玩家离开地图 offline表示是否为是否下线
+	RoleExit func(state *MapState, roleID int64, offline bool)
+	// 玩家重连进游戏
+	RoleConnect func(state *MapState, roleID int64)
+	// 玩家死亡回调
+	RoleDead func(state *MapState, roleID int64, killerType int8, killerID int64)
+	// 怪物死亡回调
+	MonsterDead func(state *MapState, monsterID int64, killerType int8, killerID int64)
+	// 玩家复活回调
+	RoleRelive func(state *MapState, roleID int64)
+	// 指定模块的消息处理
+	Handle func(state *MapState, msg interface{})
 }

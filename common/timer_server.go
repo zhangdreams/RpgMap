@@ -91,7 +91,7 @@ func doLoop() {
 	Now2 := Now2()
 	for _, timer := range timerMaps {
 		if Now2 >= timer.lastTime+int64(timer.interval) {
-			timer.Pid.In <- "Loop"
+			timer.Pid.In <- global.Loop{}
 		}
 	}
 }
@@ -99,6 +99,7 @@ func doLoop() {
 // RegisterTimer 注册一个timer轮训
 func RegisterTimer(name string, Pid *Pid, interval int) {
 	if server := WhereIs(TimerServer); server != nil {
+		fmt.Println(name, "RegisterTimer", interval)
 		server.In <- timerOp{op: "add", name: name, Pid: Pid, interval: interval}
 	}
 }

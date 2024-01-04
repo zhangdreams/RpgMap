@@ -1,7 +1,6 @@
 package maps
 
 import (
-	"fmt"
 	"math"
 	"rpgMap/config"
 	"rpgMap/global"
@@ -93,7 +92,7 @@ while:
 			neighbor.Parent = current
 			neighbor.G = tentativeG
 			neighbor.H = CalculateDistance(state, neighbor, end)
-			fmt.Println("insert to open list ", current, neighbor, step)
+			//fmt.Println("insert to open list ", current, neighbor, step)
 			if !neighbor.InSlice(openList) {
 				openList = append(openList, neighbor)
 			}

@@ -10,6 +10,8 @@ import (
 
 const MapServer = "map_server"
 
+var ModMaps = make(map[string]*MapMod)
+
 type MapData struct {
 	ID      int32
 	Pid     *common.Pid
@@ -66,7 +68,7 @@ func handleCall(data interface{}) (ret interface{}, err error) {
 	switch data.(type) {
 	case global.CreateMap:
 		m := data.(global.CreateMap)
-		ret = createMap(m.ID, m.Name, m.Line)
+		ret = createMap(m.ID, m.Name, m.Line, m.ModName)
 	default:
 		err = errors.New(fmt.Sprint(MapServer, "unhandled msg", data))
 	}
@@ -105,7 +107,7 @@ func getMap(id int32) *common.Pid {
 	if err != nil {
 		return nil
 	}
-	return createMap(id, conf.Name, 0)
+	return createMap(id, conf.Name, 0, "")
 }
 
 // getMapName 根据地图名返回map Pid
@@ -118,13 +120,16 @@ func getMapName(name string) *common.Pid {
 }
 
 // createMap 创建地图
-func createMap(id int32, name string, line int32) *common.Pid {
+func createMap(id int32, name string, line int32, modName string) *common.Pid {
 	if getMapName(name) != nil {
 		fmt.Println("exist Map MapID:", id, " name:", name)
 		return nil
 	}
 	fmt.Println("mapserver create map ", id, name, line)
-	mapPid := StartMap(id, name, line)
+	if len(modName) == 0 {
+		modName = "mod_common"
+	}
+	mapPid := StartMap(id, name, line, ModMaps[modName])
 	MapPidDic[name] = mapPid
 	maps, ok := MapDic[id]
 	if ok {
